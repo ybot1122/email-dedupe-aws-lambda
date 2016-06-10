@@ -26,7 +26,7 @@ public class Hello {
     	BufferedReader buffReader = new BufferedReader(new InputStreamReader(stream));
     	
     	// producing output
-		File output = new File("output.txt");
+    	File output = File.createTempFile("output", "txt");
 		FileWriter writer = new FileWriter(output);
 		
 		// auxiliary data structures
@@ -48,7 +48,7 @@ public class Hello {
 				writer.write(currEmail + "\n");
 			}
 		}
-		
+
 		s3Client.putObject("elasticbeanstalk-us-west-2-365496274414", "output.txt", output);
 
 		writer.close();

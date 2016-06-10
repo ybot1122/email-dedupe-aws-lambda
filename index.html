@@ -33,10 +33,14 @@
     <div id="results"></div>
 
     <script type="text/javascript">
+        AWS.config.update({
+
+        });
         var bucket = new AWS.S3({params: {Bucket: 'elasticbeanstalk-us-west-2-365496274414'}});
         var textarea = document.getElementById('email-list');
         var button = document.getElementById('upload');
         var results = document.getElementById('results');
+        /*
         button.addEventListener('click', function() {
             results.innerHTML = '';
             var params = {Key: 'emails.txt', Body: textarea.value};
@@ -45,6 +49,21 @@
                 console.log(data);
                 results.innerHTML = err ? 'ERROR!' : 'SAVED.';
             });
+        }, false);
+        */
+
+        button.addEventListener('click', function() {
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener('load', function () {
+                if (xhr.status == 200) {
+                    console.log(xhr.response);
+                } else {
+                    console.log({status: xhr.status, response: xhr.response});
+                }
+            });
+
+            xhr.open('PUT', 'http://elasticbeanstalk-us-west-2-365496274414.s3.amazonaws.com/emails.txt', true);
+            xhr.send(textarea.value);
         }, false);
     </script>
 </body>

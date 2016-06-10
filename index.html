@@ -3,11 +3,18 @@
 <head>
     <title>Basic Example</title>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <style>
+        textarea {
+            width: 500px;
+            height: 300px;
+        }
+    </style>
 </head>
 <body>
-	<h1>Email-Dedupe</h1>
-	<p>Upload a .txt file</p>
-	<p>The .txt file must have one email address per line</p>
-	<p>It is assumed that each email has only a single "@" symbol separating username and domain name</p>
+    <h1>Email-Dedupe</h1>
+    <p>Upload a .txt file</p>
+    <p>The .txt file must have one email address per line</p>
+    <p>It is assumed that each email has only a single "@" symbol separating username and domain name</p>
+    <textarea id="email-list"></textarea>
 </body>
 </html>

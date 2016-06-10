@@ -10,6 +10,7 @@
             width: 500px;
             height: 300px;
             margin: 0px auto 10px auto;
+            padding: 20px;
         }
 
         button {
@@ -17,8 +18,8 @@
             margin: 0px auto 0px auto;
             padding: 20px;
             width: 300px;
-            font-size: 18px;
-            line-height: 18px;
+            font-size: 12px;
+            line-height: 12px;
         }
     </style>
 </head>
@@ -29,10 +30,22 @@
     <p>It is assumed that each email has only a single "@" symbol separating username and domain name</p>
     <textarea id="email-list"></textarea>
     <button id="upload">Upload</button>
+    <div id="results"></div>
 
     <script type="text/javascript">
-        var s3 = new AWS.S3();
+        var bucket = new AWS.S3({params: {Bucket: 'elasticbeanstalk-us-west-2-365496274414'}});
         var textarea = document.getElementById('email-list');
+        var button = document.getElementById('upload');
+        var results = document.getElementById('results');
+        button.addEventListener('click', function() {
+            results.innerHTML = '';
+            var params = {Key: 'emails.txt', Body: textarea.value};
+            bucket.upload(params, function (err, data) {
+                console.log(err);
+                console.log(data);
+                results.innerHTML = err ? 'ERROR!' : 'SAVED.';
+            });
+        }, false);
     </script>
 </body>
 </html>

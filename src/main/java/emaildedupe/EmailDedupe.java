@@ -17,8 +17,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3Object;
 
-public class Hello {
-    public void myHandler(Map<String, Object> input, Context context) throws IOException {
+public class EmailDedupe {
+    public void dedupe(Map<String, Object> input, Context context) throws IOException {
         AmazonS3 s3Client = new AmazonS3Client();
         
     	// reading input

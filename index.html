@@ -6,8 +6,19 @@
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js"></script>
     <style>
         textarea {
+            display: block;
             width: 500px;
             height: 300px;
+            margin: 0px auto 10px auto;
+        }
+
+        button {
+            display: block;
+            margin: 0px auto 0px auto;
+            padding: 20px;
+            width: 300px;
+            font-size: 18px;
+            line-height: 18px;
         }
     </style>
 </head>
@@ -17,16 +28,11 @@
     <p>The .txt file must have one email address per line</p>
     <p>It is assumed that each email has only a single "@" symbol separating username and domain name</p>
     <textarea id="email-list"></textarea>
+    <button id="upload">Upload</button>
 
     <script type="text/javascript">
-        var roleArn = 'YOUR_ROLE_ARN';
-        var bucketName = 'YOUR_BUCKET_NAME';
-        AWS.config.region = 'YOUR_BUCKET_REGION';
-        var bucket = new AWS.S3({
-            params: {
-                Bucket: bucketName
-            }
-        });
+        var s3 = new AWS.S3();
+        var textarea = document.getElementById('email-list');
     </script>
 </body>
 </html>

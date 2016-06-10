@@ -3,6 +3,7 @@
 <head>
     <title>Basic Example</title>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js"></script>
     <style>
         textarea {
             width: 500px;
@@ -16,5 +17,16 @@
     <p>The .txt file must have one email address per line</p>
     <p>It is assumed that each email has only a single "@" symbol separating username and domain name</p>
     <textarea id="email-list"></textarea>
+
+    <script type="text/javascript">
+        var roleArn = 'YOUR_ROLE_ARN';
+        var bucketName = 'YOUR_BUCKET_NAME';
+        AWS.config.region = 'YOUR_BUCKET_REGION';
+        var bucket = new AWS.S3({
+            params: {
+                Bucket: bucketName
+            }
+        });
+    </script>
 </body>
 </html>

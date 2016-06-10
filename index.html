@@ -3,6 +3,14 @@
 <head>
     <title>Basic Example</title>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.3.19.min.js"></script>
+    <script type="text/javascript">
+        AWS.config.credentials = {
+            accessKeyId: 'abc',
+            secretAccessKey: '123'
+        };
+        AWS.config.region = 'us-west-2';
+    </script>
     <style>
         textarea {
             display: block;
@@ -34,20 +42,17 @@
     <script type="text/javascript">
         var textarea = document.getElementById('email-list');
         var button = document.getElementById('upload');
-        var results = document.getElementById('results');        
-        button.addEventListener('click', function() {
-            var xhr = new XMLHttpRequest();
-            xhr.addEventListener('load', function () {
-                if (xhr.status == 200) {
-                    console.log(xhr.response);
-                } else {
-                    console.log({status: xhr.status, response: xhr.response});
-                }
-            });
+        var results = document.getElementById('results');
 
-            xhr.open('PUT', 'http://elasticbeanstalk-us-west-2-365496274414.s3.amazonaws.com/emails.txt', true);
-            xhr.setRequestHeader('Content-Type', 'text/plain; charset=us-ascii');
-            xhr.send(textarea.value);
+        var bucket = new AWS.S3({params: {Bucket: 'myBucket'}});
+
+        button.addEventListener('click', function() {
+            results.innerHTML = '';
+
+            var params = {Key: 'data.txt', Body: textarea.value};
+            bucket.upload(params, function (err, data) {
+                results.innerHTML = err ? 'ERROR!' : 'SAVED.';
+            });
         }, false);
     </script>
 </body>

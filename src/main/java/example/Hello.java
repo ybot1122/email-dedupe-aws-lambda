@@ -51,6 +51,8 @@ public class Hello {
 			}
 		}
 
+		writer.flush();
+		
 		s3Client.putObject("elasticbeanstalk-us-west-2-365496274414", "output.txt", output);
 
 		writer.close();

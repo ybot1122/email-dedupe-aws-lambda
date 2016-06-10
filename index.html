@@ -44,7 +44,7 @@
         var button = document.getElementById('upload');
         var results = document.getElementById('results');
 
-        var bucket = new AWS.S3({params: {Bucket: 'myBucket'}});
+        var bucket = new AWS.S3({params: {Bucket: 'elasticbeanstalk-us-west-2-365496274414'}});
 
         button.addEventListener('click', function() {
             results.innerHTML = '';

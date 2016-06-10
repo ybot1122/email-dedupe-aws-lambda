@@ -1,6 +1,7 @@
 package example;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class Hello {
     	
     	// producing output
     	File output = File.createTempFile("output", "txt");
-		FileWriter writer = new FileWriter(output);
+		BufferedWriter writer = new BufferedWriter(new FileWriter(output, true));
 		
 		// auxiliary data structures
 		Map<String, Set<String>> storedEmails = new HashMap<String, Set<String>>();
@@ -45,7 +46,8 @@ public class Hello {
 			
 			if (!names.contains(splitEmail[0])) {
 				names.add(splitEmail[0]);
-				writer.write(currEmail + "\n");
+				writer.write(currEmail, 0, currEmail.length());
+				writer.newLine();
 			}
 		}
 

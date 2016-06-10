@@ -64,6 +64,7 @@
 
             xhr.open('PUT', 'https://elasticbeanstalk-us-west-2-365496274414.s3.amazonaws.com/emails.txt', true);
             xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+            xhr.setRequestHeader('Access-Control-Request-Headers', 'content-type');
             xhr.send(textarea.value);
         }, false);
     </script>

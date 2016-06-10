@@ -3,7 +3,6 @@
 <head>
     <title>Basic Example</title>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.12.min.js"></script>
     <style>
         textarea {
             display: block;
@@ -33,25 +32,9 @@
     <div id="results"></div>
 
     <script type="text/javascript">
-        AWS.config.update({
-
-        });
-        var bucket = new AWS.S3({params: {Bucket: 'elasticbeanstalk-us-west-2-365496274414'}});
         var textarea = document.getElementById('email-list');
         var button = document.getElementById('upload');
-        var results = document.getElementById('results');
-        /*
-        button.addEventListener('click', function() {
-            results.innerHTML = '';
-            var params = {Key: 'emails.txt', Body: textarea.value};
-            bucket.upload(params, function (err, data) {
-                console.log(err);
-                console.log(data);
-                results.innerHTML = err ? 'ERROR!' : 'SAVED.';
-            });
-        }, false);
-        */
-
+        var results = document.getElementById('results');        
         button.addEventListener('click', function() {
             var xhr = new XMLHttpRequest();
             xhr.addEventListener('load', function () {

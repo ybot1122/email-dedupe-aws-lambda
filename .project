@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>lambda-java-example</name>
+	<name>email-dedupe-aws-lambda</name>
 	<comment></comment>
 	<projects>
 	</projects>

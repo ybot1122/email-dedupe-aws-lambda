@@ -1,4 +1,4 @@
-package example;
+package emaildedupe;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

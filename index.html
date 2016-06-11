@@ -36,6 +36,11 @@
             color: red;
         }
 
+        #results {
+            height: 100px;
+            border: 1px black dashed;
+        }
+
         #results, #download {
             margin-top: 10px;
             text-align: center;
@@ -95,7 +100,7 @@
     <img id="loader" src="./ajax-loader.gif" />
     <button id="upload">Upload</button>
     <div id="results">
-        <p id="message"></p>
+        <p id="message">output and metrics will appear here</p>
         <p id="cloudwatch-report"></p>
         <p id="download">DOWNLOAD <a href="https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/output.txt">output.txt</a></p>
     </div>

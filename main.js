@@ -15,7 +15,8 @@ var getLastLog = function() {
 
     // request the log stream with most recent activity
     cloudwatchlogs.describeLogStreams(streamParams, function(err, data) {
-        if (err || !data || !data.logStreams || data.logStreams.length < 1 || !data.logStreams[0].logStreamName) {
+        if (err || !data || !data.logStreams || data.logStreams.length < 1
+                || !data.logStreams[0].logStreamName) {
             reportLogs.className = "err";
             reportLogs.innerHTML = "failed do retrieve runtime metrics: " + err;
             return;
@@ -31,9 +32,10 @@ var getLastLog = function() {
 
         // request most recent log from the most recent stream
         cloudwatchlogs.getLogEvents(logParams, function(err, data) {
-            if (err || !data || !data.events || data.events.length < 1 || !data.events[0].message) {
+            if (err || !data || !data.events || data.events.length < 1
+                    || !data.events[0].message) {
                 reportLogs.className = "err";
-                reportLogs.innerHTML = "failed do retrieve runtime metrics: " + err;
+                reportLogs.innerHTML = "cloudwatchlogs failure: " + err;
             } else {
                 reportLogs.innerHTML = data.events[0].message;
             }
@@ -45,7 +47,11 @@ var getLastLog = function() {
 /**
     Attach the s3 bucket upload functionality to DOM
 **/
-var bucket = new AWS.S3({params: {Bucket: "elasticbeanstalk-us-west-2-365496274414"}});
+var bucket = new AWS.S3({
+    params: {
+        Bucket: "elasticbeanstalk-us-west-2-365496274414"
+    }
+});
 var button = document.getElementById("upload");
 button.addEventListener("click", function() {
     var textarea = document.getElementById("email-list");

@@ -123,28 +123,29 @@ https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/outpu
             var streamParams = {
                 logGroupName: "/aws/lambda/test",
                 limit: 1,
-                orderBy: "LastEventTime",
-                logStreamNamePrefix: "2016"
+                logStreamNamePrefix: "2016",
                 descending: false
             }
             cloudwatchlogs.describeLogStreams(streamParams, function(err, data) {
-                if (err) {
+                if (err || !data || !data.logStreams || data.logStreams.length < 1 || !data.logStreams[0].logStreamName) {
                     console.log("failed do retrieve runtime metrics: " + err);
                     return;
                 }
-                console.log(data);
+
+                var streamName = data.logStreams[0].logStreamName;
+
                 var logParams = {
                     logGroupName: "/aws/lambda/test",
-                    logStreamName: "2016/06/11/[$LATEST]8d048f55f2544e1ea70475ad189bba6f",
+                    logStreamName: streamName,
                     limit: 1,
                     startFromHead: false
                 }
 
-                cloudwatchlogs.getLogEvents(params, function(err, data) {
+                cloudwatchlogs.getLogEvents(logParams, function(err, data) {
                     if (err) {
                         console.log(err);
                     } else {
-                        console.log(data);
+                        console.log(data.events[0].message);
                     }
                 });
             });

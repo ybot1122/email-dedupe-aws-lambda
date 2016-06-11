@@ -12,9 +12,28 @@
         AWS.config.region = 'us-west-2';
     </script>
     <style>
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #instructions {
+            min-width: 300px;
+            max-width: 500px;
+            width: 90vw;
+            margin: 0px auto 0px auto;
+        }
+
         textarea {
             display: block;
-            width: 500px;
+            min-width: 300px;
+            max-width: 500px;
+            width: 80vw;
             height: 300px;
             margin: 0px auto 10px auto;
             padding: 20px;
@@ -32,9 +51,11 @@
 </head>
 <body>
     <h1>Email-Dedupe</h1>
-    <p>Upload a .txt file</p>
-    <p>The .txt file must have one email address per line</p>
-    <p>It is assumed that each email has only a single "@" symbol separating username and domain name</p>
+    <div id="instructions">
+        <p>Upload a .txt file</p>
+        <p>The .txt file must have one email address per line</p>
+        <p>It is assumed that each email has only a single "@" symbol separating username and domain name</p>
+    </div>
     <textarea id="email-list"></textarea>
     <button id="upload">Upload</button>
     <div id="results"></div>

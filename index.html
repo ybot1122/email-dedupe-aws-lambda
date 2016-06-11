@@ -14,7 +14,6 @@
         AWS.config.region = "us-west-2";
     </script>
     <style>
-
         body {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 14px;
@@ -110,90 +109,6 @@
         <p><a href="./deduped.txt">Deduped List of Above Sample Set</a></p>
     </div>
 
-    <script type="text/javascript">
-        // implementing upload, loading, error, and success state functionality
-        var textarea = document.getElementById("email-list");
-        var button = document.getElementById("upload");
-        var loader = document.getElementById("loader");
-
-        var bucket = new AWS.S3({params: {Bucket: "elasticbeanstalk-us-west-2-365496274414"}});
-        var cloudwatchlogs = new AWS.CloudWatchLogs();
-
-        // auxiliary function which retrieves CloudWatchLogs and renders message to DOM
-        var getLastLog = function() {
-            var streamParams = {
-                logGroupName: "/aws/lambda/test",
-                limit: 1,
-                logStreamNamePrefix: "2016",
-                descending: false
-            }
-            cloudwatchlogs.describeLogStreams(streamParams, function(err, data) {
-                var reportLogs = document.getElementById("cloudwatch-report");
-                reportLogs.className = "";
-                reportLogs.innerHTML = "";
-
-                if (err || !data || !data.logStreams || data.logStreams.length < 1 || !data.logStreams[0].logStreamName) {
-                    reportLogs.className = "err";
-                    reportLogs.innerHTML = "failed do retrieve runtime metrics: " + err;
-                    return;
-                }
-
-                var streamName = data.logStreams[0].logStreamName;
-
-                var logParams = {
-                    logGroupName: "/aws/lambda/test",
-                    logStreamName: streamName,
-                    limit: 1,
-                    startFromHead: true
-                }
-
-                cloudwatchlogs.getLogEvents(logParams, function(err, data) {
-                    if (err || !data || !data.events || data.events.length < 1 || !data.events[0].message) {
-                        reportLogs.className = "err";
-                        reportLogs.innerHTML = "failed do retrieve runtime metrics: " + err;
-                    } else {
-                        reportLogs.innerHTML = data.events[0].message;
-                    }
-                });
-            });
-        }
-
-        // Event listener that fires off the S3 upload process
-        button.addEventListener("click", function() {
-            var message = document.getElementById("message");
-            var download = document.getElementById("download");
-
-            if (!textarea.value) {
-                message.className = "err";
-                message.innerHTML = "Cannot submit empty input";
-                return;
-            }
-
-            message.innerHTML = "";
-            message.clasName= "";
-
-            loader.style.display = "block";
-            button.style.display = "none";
-            download.style.display = "none";
-
-            var params = {Key: "emails.txt", Body: textarea.value};
-            var startTime = Date.now();
-
-            bucket.upload(params, function (err, data) {
-                loader.style.display = "none";
-                button.style.display = "block";
-                if (err) {
-                    message.className = "err";
-                    message.innerHTML = "An error occurred: " + err;
-                } else {
-                    var duration = Date.now() - startTime;
-                    message.className = "";
-                    message.innerHTML = "Success in " + duration + " ms";
-                    download.style.display = "block";
-                    getLastLog();
-                }
-            });
-        }, false);
-    </script>
+    <script src="./main.js"></script>
 </body>
 </html>

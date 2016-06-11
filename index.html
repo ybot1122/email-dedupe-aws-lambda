@@ -144,7 +144,7 @@
                     logGroupName: "/aws/lambda/test",
                     logStreamName: streamName,
                     limit: 1,
-                    startFromHead: false
+                    startFromHead: true
                 }
 
                 cloudwatchlogs.getLogEvents(logParams, function(err, data) {

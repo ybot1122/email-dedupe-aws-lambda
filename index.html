@@ -22,7 +22,7 @@
             text-align: center;
         }
 
-        #instructions {
+        #instructions, #results {
             min-width: 300px;
             max-width: 500px;
             width: 90vw;
@@ -30,8 +30,19 @@
             padding: 0px;
         }
 
-        #instructions span.note {
+        #results {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        #instructions span.note, #results.err {
+            font-weight: bold;
             color: red;
+        }
+
+        #loader {
+            display: none;
+            margin: 0px auto 10px auto;
         }
 
         textarea {
@@ -63,6 +74,7 @@
         <p><span class="note">NOTE</span> assumes that each email contains a single "&#64;" (at) symbol that separates email name from domain name</p>
     </div>
     <textarea id="email-list"></textarea>
+    <img id="loader" src="./ajax-loader.gif" />
     <button id="upload">Upload</button>
     <div id="results"></div>
 
@@ -70,15 +82,32 @@
         var textarea = document.getElementById('email-list');
         var button = document.getElementById('upload');
         var results = document.getElementById('results');
+        var loader = document.getElementById('loader');
 
         var bucket = new AWS.S3({params: {Bucket: 'elasticbeanstalk-us-west-2-365496274414'}});
 
         button.addEventListener('click', function() {
-            results.innerHTML = '';
 
+            if (!textarea.value) {
+                results.className = "err";
+                results.innerHTML = "Cannot submit empty input";
+                return;
+            }
+
+            results.innerHTML = '';
             var params = {Key: 'emails.txt', Body: textarea.value};
+            loader.style.display = "block";
+            upload.style.display = "none";
             bucket.upload(params, function (err, data) {
-                results.innerHTML = err ? 'ERROR!' : 'SAVED.';
+                loader.style.display = "none";
+                upload.style.display = "block";
+                if (err) {
+                    results.className = "err";
+                    results.innerHTML = "An error occurred: " + err;
+                } else {
+                    results.className = "";
+                    results.innerHTML = "Success!";
+                }
             });
         }, false);
     </script>

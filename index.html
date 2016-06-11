@@ -8,10 +8,10 @@
         // IAM user specifically constrained to S3 PUT (specific bucket-key) and CloudwatchLogs GET
         // I know its still preferred to not expose this stuff
         AWS.config.credentials = {
-            accessKeyId: 'AKIAJT3FZNDGZ52EZ5JA',
-            secretAccessKey: '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'
+            accessKeyId: "AKIAJT3FZNDGZ52EZ5JA",
+            secretAccessKey: "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"
         };
-        AWS.config.region = 'us-west-2';
+        AWS.config.region = "us-west-2";
     </script>
     <style>
 
@@ -35,12 +35,6 @@
         #requirements, #results.err {
             font-weight: bold;
             color: red;
-        }
-
-        #results {
-            height: 100px;
-            border: 1px black dashed;
-            padding: 20px;
         }
 
         #results, #download {
@@ -116,44 +110,59 @@ https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/outpu
 
     <script type="text/javascript">
         // implementing upload, loading, error, and success state functionality
-        var textarea = document.getElementById('email-list');
-        var button = document.getElementById('upload');
-        var results = document.getElementById('results');
-        var loader = document.getElementById('loader');
-        var download = document.getElementById('download');
+        var textarea = document.getElementById("email-list");
+        var button = document.getElementById("upload");
+        var results = document.getElementById("results");
+        var loader = document.getElementById("loader");
+        var download = document.getElementById("download");
 
-        var bucket = new AWS.S3({params: {Bucket: 'elasticbeanstalk-us-west-2-365496274414'}});
+        var bucket = new AWS.S3({params: {Bucket: "elasticbeanstalk-us-west-2-365496274414"}});
         var cloudwatchlogs = new AWS.CloudWatchLogs();
 
         var getLastLog = function() {
-            var params = {
-                logGroupName: '/aws/lambda/test',
-                logStreamName: '*',
+            var streamParams = {
+                logGroupName: "/aws/lambda/test",
                 limit: 1,
-                startFromHead: false
+                orderBy: "LastEventTime",
+                logStreamNamePrefix: "2016"
+                descending: false
             }
-            cloudwatchlogs.getLogEvents(params, function(err, data) {
+            cloudwatchlogs.describeLogStreams(streamParams, function(err, data) {
                 if (err) {
-                    console.log(err);
-                } else {
-                    console.log(data);
+                    console.log("failed do retrieve runtime metrics: " + err);
+                    return;
                 }
+                console.log(data);
+                var logParams = {
+                    logGroupName: "/aws/lambda/test",
+                    logStreamName: "2016/06/11/[$LATEST]8d048f55f2544e1ea70475ad189bba6f",
+                    limit: 1,
+                    startFromHead: false
+                }
+
+                cloudwatchlogs.getLogEvents(params, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log(data);
+                    }
+                });
             });
         }
 
-        button.addEventListener('click', function() {
+        button.addEventListener("click", function() {
             if (!textarea.value) {
                 results.className = "err";
                 results.innerHTML = "Cannot submit empty input";
                 return;
             }
 
-            results.innerHTML = '';
+            results.innerHTML = "";
             loader.style.display = "block";
             upload.style.display = "none";
             download.style.display = "none";
 
-            var params = {Key: 'emails.txt', Body: textarea.value};
+            var params = {Key: "emails.txt", Body: textarea.value};
             var startTime = Date.now();
 
             bucket.upload(params, function (err, data) {

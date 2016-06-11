@@ -22,7 +22,7 @@
             text-align: center;
         }
 
-        #instructions, #results {
+        #instructions, #results, #download {
             min-width: 300px;
             max-width: 500px;
             width: 90vw;
@@ -35,7 +35,7 @@
             color: red;
         }
 
-        #results {
+        #results, #download {
             margin-top: 10px;
             text-align: center;
         }
@@ -45,7 +45,7 @@
             margin-bottom: 0px;
         }
 
-        #loader {
+        #loader, #download {
             display: none;
             margin: 0px auto 10px auto;
         }
@@ -94,12 +94,15 @@
     <img id="loader" src="./ajax-loader.gif" />
     <button id="upload">Upload</button>
     <div id="results"></div>
+    <div id="download">DOWNLOAD <a href="    
+https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/output.txt">output.txt</a></div>
 
     <script type="text/javascript">
         var textarea = document.getElementById('email-list');
         var button = document.getElementById('upload');
         var results = document.getElementById('results');
         var loader = document.getElementById('loader');
+        var download = document.getElementById('download');
 
         var bucket = new AWS.S3({params: {Bucket: 'elasticbeanstalk-us-west-2-365496274414'}});
 
@@ -114,6 +117,7 @@
             results.innerHTML = '';
             loader.style.display = "block";
             upload.style.display = "none";
+            download.style.display = "none";
 
             var params = {Key: 'emails.txt', Body: textarea.value};
             var startTime = Date.now();
@@ -128,6 +132,7 @@
                     var duration = Date.now() - startTime;
                     results.className = "";
                     results.innerHTML = "Success in " + duration + " ms";
+                    download.style.display = "block";
                 }
             });
         }, false);

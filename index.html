@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.3.19.min.js"></script>
     <script type="text/javascript">
+        // IAM user specifically constrained to S3 PUT (specific bucket-key) and CloudwatchLogs GET
+        // I know its still preferred to not expose this stuff
         AWS.config.credentials = {
             accessKeyId: 'AKIAJT3FZNDGZ52EZ5JA',
             secretAccessKey: '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'
@@ -107,6 +109,7 @@ https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/outpu
     </div>
 
     <script type="text/javascript">
+        // implementing upload, loading, error, and success state functionality
         var textarea = document.getElementById('email-list');
         var button = document.getElementById('upload');
         var results = document.getElementById('results');
@@ -114,9 +117,9 @@ https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/outpu
         var download = document.getElementById('download');
 
         var bucket = new AWS.S3({params: {Bucket: 'elasticbeanstalk-us-west-2-365496274414'}});
+        var cloudwatchlogs = new AWS.CloudWatchLogs();
 
         button.addEventListener('click', function() {
-
             if (!textarea.value) {
                 results.className = "err";
                 results.innerHTML = "Cannot submit empty input";

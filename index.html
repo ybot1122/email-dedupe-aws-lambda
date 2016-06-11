@@ -27,6 +27,11 @@
             max-width: 500px;
             width: 90vw;
             margin: 0px auto 0px auto;
+            padding: 0px;
+        }
+
+        #instructions span.note {
+            color: red;
         }
 
         textarea {
@@ -52,9 +57,10 @@
 <body>
     <h1>Email-Dedupe</h1>
     <div id="instructions">
-        <p>Upload a .txt file</p>
-        <p>The .txt file must have one email address per line</p>
-        <p>It is assumed that each email has only a single "@" symbol separating username and domain name</p>
+        <p>Given a list of email addresses, one per line, this program will remove all duplicate emails while retaining original order</p>
+        <p>The output will be a downloadable .txt file containing one email address per line</p>
+        <p><span class="note">NOTE</span> assumes that each email address is valid</p>
+        <p><span class="note">NOTE</span> assumes that each email contains a single "&#64;" (at) symbol that separates email name from domain name</p>
     </div>
     <textarea id="email-list"></textarea>
     <button id="upload">Upload</button>

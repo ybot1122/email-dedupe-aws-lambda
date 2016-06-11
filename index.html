@@ -22,7 +22,7 @@
             text-align: center;
         }
 
-        #instructions, #results, #download {
+        #instructions, #results, #download, #datasets {
             min-width: 300px;
             max-width: 500px;
             width: 90vw;
@@ -96,6 +96,15 @@
     <div id="results"></div>
     <div id="download">DOWNLOAD <a href="    
 https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/output.txt">output.txt</a></div>
+
+    <div id="datasets">
+        <h2>Test Data Generation</h2>
+        <p>You can use this python script to generate 100,000 emails with 50% duplication. More instructions in the comments.</p>
+        <p><a href="./random_emails.py">random_emails.py</a></p>
+        <p>Here is a dataset generated using the above script, available for immediate download:</p>
+        <p><a href="./emails.txt">100,000 Random Emails w/ 50% Duplication</a></p>
+        <p><a href="./deduped.txt">Deduped List of Above Sample Set</a></p>
+    </div>
 
     <script type="text/javascript">
         var textarea = document.getElementById('email-list');

@@ -7,8 +7,8 @@ var getLastLog = function() {
     var streamParams = {
         logGroupName: "/aws/lambda/test",
         limit: 1,
-        logStreamNamePrefix: "2016",
-        descending: false
+        orderBy: "LastEventTime",
+        descending: true
     }
     reportLogs.className = "";
     reportLogs.innerHTML = "";
@@ -21,13 +21,13 @@ var getLastLog = function() {
             reportLogs.innerHTML = "failed do retrieve runtime metrics: " + err;
             return;
         }
-
+        console.log(data);
         var streamName = data.logStreams[0].logStreamName;
         var logParams = {
             logGroupName: "/aws/lambda/test",
             logStreamName: streamName,
             limit: 1,
-            startFromHead: true
+            startFromHead: false
         }
 
         // request most recent log from the most recent stream
@@ -37,6 +37,7 @@ var getLastLog = function() {
                 reportLogs.className = "err";
                 reportLogs.innerHTML = "cloudwatchlogs failure: " + err;
             } else {
+                console.log(data);
                 reportLogs.innerHTML = data.events[0].message;
             }
         });
@@ -57,6 +58,8 @@ button.addEventListener("click", function() {
     var textarea = document.getElementById("email-list");
     var message = document.getElementById("message");
     var download = document.getElementById("download");
+    var reportLogs = document.getElementById("cloudwatch-report");
+    reportLogs.innerHTML = "";
 
     // handle invalid input
     if (!textarea.value) {

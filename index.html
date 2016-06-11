@@ -37,6 +37,12 @@
             color: red;
         }
 
+        #results {
+            height: 100px;
+            border: 1px black dashed;
+            padding: 20px;
+        }
+
         #results, #download {
             margin-top: 10px;
             text-align: center;
@@ -119,6 +125,22 @@ https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/outpu
         var bucket = new AWS.S3({params: {Bucket: 'elasticbeanstalk-us-west-2-365496274414'}});
         var cloudwatchlogs = new AWS.CloudWatchLogs();
 
+        var getLastLog = function() {
+            var params = {
+                logGroupName: '/aws/lambda/test',
+                logStreamName: '*',
+                limit: 1,
+                startFromHead: false
+            }
+            cloudwatchlogs.getLogEvents(params, function(err, data) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(data);
+                }
+            });
+        }
+
         button.addEventListener('click', function() {
             if (!textarea.value) {
                 results.className = "err";
@@ -145,6 +167,7 @@ https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/outpu
                     results.className = "";
                     results.innerHTML = "Success in " + duration + " ms";
                     download.style.display = "block";
+                    getLastLog();
                 }
             });
         }, false);

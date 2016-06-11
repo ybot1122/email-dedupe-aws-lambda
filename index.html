@@ -49,7 +49,7 @@
         button.addEventListener('click', function() {
             results.innerHTML = '';
 
-            var params = {Key: 'data.txt', Body: textarea.value};
+            var params = {Key: 'emails.txt', Body: textarea.value};
             bucket.upload(params, function (err, data) {
                 results.innerHTML = err ? 'ERROR!' : 'SAVED.';
             });

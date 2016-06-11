@@ -95,9 +95,12 @@
             }
 
             results.innerHTML = '';
-            var params = {Key: 'emails.txt', Body: textarea.value};
             loader.style.display = "block";
             upload.style.display = "none";
+
+            var params = {Key: 'emails.txt', Body: textarea.value};
+            var startTime = Date.now();
+
             bucket.upload(params, function (err, data) {
                 loader.style.display = "none";
                 upload.style.display = "block";
@@ -105,8 +108,9 @@
                     results.className = "err";
                     results.innerHTML = "An error occurred: " + err;
                 } else {
+                    var duration = Date.now() - startTime;
                     results.className = "";
-                    results.innerHTML = "Success!";
+                    results.innerHTML = "Success in " + duration + " ms";
                 }
             });
         }, false);

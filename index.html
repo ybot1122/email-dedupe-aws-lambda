@@ -6,7 +6,7 @@
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.3.19.min.js"></script>
     <script type="text/javascript">
         // IAM user specifically constrained to S3 PUT (specific bucket-key) and CloudwatchLogs GET
-        // I know its still preferred to not expose this stuff
+        // I know its best to not expose this stuff
         AWS.config.credentials = {
             accessKeyId: "AKIAJT3FZNDGZ52EZ5JA",
             secretAccessKey: "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"
@@ -32,7 +32,7 @@
             padding: 0px;
         }
 
-        #requirements, #results.err {
+        #requirements, .err {
             font-weight: bold;
             color: red;
         }
@@ -95,9 +95,11 @@
     <textarea id="email-list"></textarea>
     <img id="loader" src="./ajax-loader.gif" />
     <button id="upload">Upload</button>
-    <div id="results"></div>
-    <div id="download">DOWNLOAD <a href="    
-https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/output.txt">output.txt</a></div>
+    <div id="results">
+        <p id="message"></p>
+        <p id="cloudwatch-report"></p>
+        <p id="download">DOWNLOAD <a href="https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/output.txt">output.txt</a></p>
+    </div>
 
     <div id="datasets">
         <h2>Test Data Generation</h2>
@@ -112,13 +114,12 @@ https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/outpu
         // implementing upload, loading, error, and success state functionality
         var textarea = document.getElementById("email-list");
         var button = document.getElementById("upload");
-        var results = document.getElementById("results");
         var loader = document.getElementById("loader");
-        var download = document.getElementById("download");
 
         var bucket = new AWS.S3({params: {Bucket: "elasticbeanstalk-us-west-2-365496274414"}});
         var cloudwatchlogs = new AWS.CloudWatchLogs();
 
+        // auxiliary function which retrieves CloudWatchLogs and renders message to DOM
         var getLastLog = function() {
             var streamParams = {
                 logGroupName: "/aws/lambda/test",
@@ -127,8 +128,13 @@ https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/outpu
                 descending: false
             }
             cloudwatchlogs.describeLogStreams(streamParams, function(err, data) {
+                var reportLogs = document.getElementById("cloudwatch-report");
+                reportLogs.className = "";
+                reportLogs.innerHTML = "";
+
                 if (err || !data || !data.logStreams || data.logStreams.length < 1 || !data.logStreams[0].logStreamName) {
-                    console.log("failed do retrieve runtime metrics: " + err);
+                    reportLogs.className = "err";
+                    reportLogs.innerHTML = "failed do retrieve runtime metrics: " + err;
                     return;
                 }
 
@@ -142,25 +148,32 @@ https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/outpu
                 }
 
                 cloudwatchlogs.getLogEvents(logParams, function(err, data) {
-                    if (err) {
-                        console.log(err);
+                    if (err || !data || !data.events || data.events.length < 1 || !data.events[0].message) {
+                        reportLogs.className = "err";
+                        reportLogs.innerHTML = "failed do retrieve runtime metrics: " + err;
                     } else {
-                        console.log(data.events[0].message);
+                        reportLogs.innerHTML = data.events[0].message;
                     }
                 });
             });
         }
 
+        // Event listener that fires off the S3 upload process
         button.addEventListener("click", function() {
+            var message = document.getElementById("message");
+            var download = document.getElementById("download");
+
             if (!textarea.value) {
-                results.className = "err";
-                results.innerHTML = "Cannot submit empty input";
+                message.className = "err";
+                message.innerHTML = "Cannot submit empty input";
                 return;
             }
 
-            results.innerHTML = "";
+            message.innerHTML = "";
+            message.clasName= "";
+
             loader.style.display = "block";
-            upload.style.display = "none";
+            button.style.display = "none";
             download.style.display = "none";
 
             var params = {Key: "emails.txt", Body: textarea.value};
@@ -168,14 +181,14 @@ https://s3-us-west-2.amazonaws.com/elasticbeanstalk-us-west-2-365496274414/outpu
 
             bucket.upload(params, function (err, data) {
                 loader.style.display = "none";
-                upload.style.display = "block";
+                button.style.display = "block";
                 if (err) {
-                    results.className = "err";
-                    results.innerHTML = "An error occurred: " + err;
+                    message.className = "err";
+                    message.innerHTML = "An error occurred: " + err;
                 } else {
                     var duration = Date.now() - startTime;
-                    results.className = "";
-                    results.innerHTML = "Success in " + duration + " ms";
+                    message.className = "";
+                    message.innerHTML = "Success in " + duration + " ms";
                     download.style.display = "block";
                     getLastLog();
                 }

@@ -74,6 +74,9 @@ var getLastLog = function() {
             return;
         }
         var streamName = data.logStreams[0].logStreamName;
+
+        console.log(data);
+
         var logParams = {
             logGroupName: "/aws/lambda/test",
             logStreamName: streamName,
@@ -88,6 +91,7 @@ var getLastLog = function() {
                 reportLogs.className = "err";
                 reportLogs.innerHTML = "cloudwatchlogs failure: " + err;
             } else {
+                console.log(data);
                 reportLogs.innerHTML = data.events[0].message;
             }
         });

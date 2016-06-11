@@ -34,7 +34,7 @@ var inputValidation = function() {
     }
 
     // every element must pass regex test
-    var reg = new RegExp("^[^@]+@[^@]+\.[^@]+$", "i");
+    var reg = new RegExp(/^[^@]+@[^@]+\.[^@]+$/);
     var regTest = lines.every(function(val, ind) {
         var result = reg.test(val);
         if (!result) {

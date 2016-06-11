@@ -1,4 +1,56 @@
 /**
+    Helper function for basic input validation
+    Unfortunately, the backend service does NOT have this check
+        which is not best practice. Should be suitable for demo purposes.
+**/
+var inputValidation = function() {
+    var textarea = document.getElementById("email-list");
+    var input = textarea.value;
+    var validationResult = {
+        status: "FAILURE",
+        reason: ""
+    };
+
+    // case: empty input
+    if (!input) {
+        validationResult.reason = "Empty Input";
+        return validationResult;
+    }
+
+    // split input by newline, and test each line with regex
+    var lines = input.split("\n");
+
+    // case: string split yielded invalid or empty array
+    if (!lines || lines.length === 0) {
+        validationResult.reason = "Couldn't Parse NewLines";
+        return validationResult;
+    }
+
+    var len = lines.length;
+
+    // omit the last line if it is an empty line
+    if (len > 1 && (lines[len - 1] || lines[len - 1].length === 0)) {
+        lines.pop();
+    }
+
+    // every element must pass regex test
+    var reg = new RegExp("[^@]+@[^@]+\.[^@]+", "i");
+    var regTest = lines.every(function(val, ind) {
+        var result = reg.test(val);
+        if (!result) {
+            validationResult.reason = "regex failed for: " + val;
+        }
+        return result;
+    });
+
+    if (regTest) {
+        validationResult.status = "SUCCESS";
+    }
+
+    return validationResult;
+}
+
+/**
     Define helper function to handle CloudWatchLogs retrieval    
 **/
 var cloudwatchlogs = new AWS.CloudWatchLogs();
@@ -21,7 +73,6 @@ var getLastLog = function() {
             reportLogs.innerHTML = "failed do retrieve runtime metrics: " + err;
             return;
         }
-        console.log(data);
         var streamName = data.logStreams[0].logStreamName;
         var logParams = {
             logGroupName: "/aws/lambda/test",
@@ -37,7 +88,6 @@ var getLastLog = function() {
                 reportLogs.className = "err";
                 reportLogs.innerHTML = "cloudwatchlogs failure: " + err;
             } else {
-                console.log(data);
                 reportLogs.innerHTML = data.events[0].message;
             }
         });
@@ -62,9 +112,10 @@ button.addEventListener("click", function() {
     reportLogs.innerHTML = "";
 
     // handle invalid input
-    if (!textarea.value) {
+    var validationResult = inputValidation();
+    if (validationResult.status === "FAILURE") {
         message.className = "err";
-        message.innerHTML = "Cannot submit empty input";
+        message.innerHTML = validationResult.reason;
         return;
     }
 

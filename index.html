@@ -162,7 +162,7 @@
                     message.className = "";
                     message.innerHTML = "Total time: " + duration + " ms";
                     download.style.display = "block";
-                    getLastLog();
+                    setTimeout(getLastLog, 3000);
                 }
             });
         }, false);

@@ -115,10 +115,10 @@ var getLastLog = function() {
                 reportLogs.innerHTML = "cloudwatchlogs failure: " + err;
             } else {
                 var metrics = parseLogMessage(data.events[0].message);
-                reportLogs.innerHTML = 
-                    "RequestID: " + metrics.requestId +
-                    "Duration: " + metrics.duration +
-                    "Max Memory Used: " + metrics.memoryUsed;
+                reportLogs.innerHTML = "CLOUDWATCH LOG METRICS: " +
+                    metrics.requestId + ", " +
+                    metrics.duration + ", " +
+                    metrics.memoryUsed;
             }
         });
     });

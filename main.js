@@ -70,7 +70,7 @@ var getLastLog = function() {
         if (err || !data || !data.logStreams || data.logStreams.length < 1
                 || !data.logStreams[0].logStreamName) {
             reportLogs.className = "err";
-            reportLogs.innerHTML = "failed do retrieve runtime metrics: " + err;
+            reportLogs.innerHTML = "failed to retrieve runtime metrics: " + err;
             return;
         }
         var streamName = data.logStreams[0].logStreamName;

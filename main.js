@@ -88,7 +88,6 @@ var getLastLog = function() {
         descending: true
     }
     reportLogs.className = "";
-    reportLogs.innerHTML = "";
 
     // request the log stream with most recent activity
     cloudwatchlogs.describeLogStreams(streamParams, function(err, data) {

@@ -31,6 +31,14 @@
             padding: 0px;
         }
 
+        #cloudwatch-report {
+            text-align: left;
+        }
+
+        #cloudwatch-report:first-line {
+            font-weight: bold;
+        }
+
         #requirements, .err {
             font-weight: bold;
             color: red;
@@ -162,7 +170,8 @@
                     message.className = "";
                     message.innerHTML = "Total time: " + duration + " ms";
                     download.style.display = "block";
-                    setTimeout(getLastLog, 3000);
+                    reportLogs.innerHTML = "... retrieving logs please wait ...";
+                    setTimeout(getLastLog, 5000);
                 }
             });
         }, false);

@@ -100,8 +100,6 @@ var getLastLog = function() {
         }
         var streamName = data.logStreams[0].logStreamName;
 
-        console.log(data);
-
         var logParams = {
             logGroupName: "/aws/lambda/email-deduping",
             logStreamName: streamName,

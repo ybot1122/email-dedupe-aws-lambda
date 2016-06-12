@@ -102,18 +102,25 @@ var getLastLog = function() {
         var logParams = {
             logGroupName: "/aws/lambda/deduplicate-emails",
             logStreamName: streamName,
-            limit: 1,
+            limit: 3,
             startFromHead: false
         }
 
         // request most recent log from the most recent stream
         cloudwatchlogs.getLogEvents(logParams, function(err, data) {
-            if (err || !data || !data.events || data.events.length < 1
-                    || !data.events[0].message) {
+            if (err || !data || !data.events || data.events.length < 1) {
                 reportLogs.className = "err";
                 reportLogs.innerHTML = "cloudwatchlogs failure: " + err;
             } else {
-                var metrics = parseLogMessage(data.events[0].message);
+                var metricsLog;
+                if (data.events[0].message.includes("REPORT")) {
+                    metricsLog = data.events[0];
+                } else if (data.events[1].message.includes("REPORT")) {
+                    metricsLog = data.events[1];
+                } else {
+                    metricsLog = data.events[2];
+                }
+                var metrics = parseLogMessage(metricsLog.message);
                 reportLogs.innerHTML = "CLOUDWATCH LOG METRICS: <br />" +
                     metrics.requestId + "<br />" +
                     metrics.duration + "<br />" +

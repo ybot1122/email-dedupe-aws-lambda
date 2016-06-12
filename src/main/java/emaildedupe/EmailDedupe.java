@@ -18,6 +18,11 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.S3Object;
 
+/**
+ * AWS Lambda routine that will read a specific file from S3, and upload
+ * a specific file to S3 that contains the de-duplicated email list
+ */
+
 public class EmailDedupe {
     public void dedupe(Map<String, Object> input, Context context) throws IOException {
         AmazonS3 s3Client = new AmazonS3Client();

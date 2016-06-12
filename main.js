@@ -1,7 +1,8 @@
 /**
     Perform for basic input validation on textarea value
-    Unfortunately, the backend service does NOT have this check
-        which is not best practice. For demo purposes.
+
+    CAVEAT
+        the backend service does NOT have this check which is not best practice
 **/
 var inputValidation = function() {
     var textarea = document.getElementById("email-list");
@@ -52,10 +53,30 @@ var inputValidation = function() {
 
 /**
     Helper function to parse the CloudWatchLog event message into JSON
+
+    ASSUMES
+        the input message is a standard AWS Lambda REPORT logging event
 **/
+var parseLogMessage = function(message) {
+    var reqId = /RequestId: (\S)+/.exec(message);
+    var dur = /Duration: (\d|\.)+ ms/.exec(message);
+    var mem = /Max Memory Used: (\d|\.)+ \S{2}/.exec(message);
+
+    var result = {
+        requestId: (reqId && reqId.length > 0) ? reqId[0] : "ERROR",
+        duration: (dur && dur.length > 0) ? dur[0] : "ERROR",
+        memoryUsed: (mem && mem.length > 0) ? mem[0] : "ERROR"        
+    }
+
+    return result;
+}
 
 /**
     Procedure to retrieve Lambda's logStreams, and then the latest event logged
+
+    CAVEAT
+        This sequence is not robust to race condition; it is possible that the
+        incorrect log event is returned if multiple dedupe's have been triggered
 **/
 var cloudwatchlogs = new AWS.CloudWatchLogs();
 var getLastLog = function() {
@@ -95,8 +116,11 @@ var getLastLog = function() {
                 reportLogs.className = "err";
                 reportLogs.innerHTML = "cloudwatchlogs failure: " + err;
             } else {
-                console.log(data);
-                reportLogs.innerHTML = data.events[0].message;
+                var metrics = parseLogMessage(data.events[0].message);
+                reportLogs.innerHTML = 
+                    "RequestID: " + metrics.requestId +
+                    "Duration: " + metrics.duration +
+                    "Max Memory Used: " + metrics.memoryUsed;
             }
         });
     });

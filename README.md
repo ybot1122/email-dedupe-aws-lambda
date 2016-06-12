@@ -1,4 +1,7 @@
 # email-dedupe-aws-lambda
+
+**DEMO LINK:** http://ybot1122.github.io/email-dedupe-aws-lambda/ >>> *temporarily disabled the AWS creds (June 20, 2016)* <<<
+
 This is a Maven project because that made it easier to deploy to AWS Lambda. The actual function is under [src/main/java/emaildedupe/EmailDedupe.java](src/main/java/emaildedupe/EmailDedupe.java)
 
 The demo is deployed via GitHub pages. To view the source code for the frontend, checkout the [gh-pages branch](https://github.com/ybot1122/email-dedupe-aws-lambda/tree/gh-pages)

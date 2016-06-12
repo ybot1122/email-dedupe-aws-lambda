@@ -82,7 +82,7 @@ var cloudwatchlogs = new AWS.CloudWatchLogs();
 var getLastLog = function() {
     var reportLogs = document.getElementById("cloudwatch-report");
     var streamParams = {
-        logGroupName: "/aws/lambda/email-deduping",
+        logGroupName: "/aws/lambda/duplicate-emails",
         limit: 1,
         orderBy: "LastEventTime",
         descending: true
@@ -101,7 +101,7 @@ var getLastLog = function() {
         var streamName = data.logStreams[0].logStreamName;
 
         var logParams = {
-            logGroupName: "/aws/lambda/email-deduping",
+            logGroupName: "/aws/lambda/duplicate-emails",
             logStreamName: streamName,
             limit: 1,
             startFromHead: false

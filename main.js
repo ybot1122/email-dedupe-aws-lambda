@@ -104,7 +104,7 @@ var getLastLog = function() {
 **/
 var bucket = new AWS.S3({
     params: {
-        Bucket: "elasticbeanstalk-us-west-2-365496274414"
+        Bucket: "email-dedupe-bucket"
     }
 });
 var button = document.getElementById("upload");

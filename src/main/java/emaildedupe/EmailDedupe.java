@@ -16,7 +16,6 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 
 public class EmailDedupe {
@@ -54,10 +53,8 @@ public class EmailDedupe {
 
 		writer.flush();
 		
-		s3Client.putObject(
-			new PutObjectRequest("email-dedupe-bucket", "output.txt", output)
-				.withCannedAcl(CannedAccessControlList.PublicRead)
-		);
+		s3Client.putObject("email-dedupe-bucket", "output.txt", output);
+		s3Client.setObjectAcl("email-dedupe-bucket", "output.txt", CannedAccessControlList.PublicRead);
 
 		writer.close();
 		buffReader.close();

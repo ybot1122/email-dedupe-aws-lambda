@@ -21,12 +21,12 @@ import com.amazonaws.services.s3.model.S3Object;
 public class EmailDedupe {
     public void dedupe(Map<String, Object> input, Context context) throws IOException {
         AmazonS3 s3Client = new AmazonS3Client();
-    	// reading input
+    	// open emails.txt file from s3
     	S3Object emailList = s3Client.getObject("email-dedupe-bucket", "emails.txt");
     	InputStream stream = emailList.getObjectContent();
     	BufferedReader buffReader = new BufferedReader(new InputStreamReader(stream));
     	
-    	// producing output
+    	// create temporary file to write deduped list
     	File output = File.createTempFile("output", "txt");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(output, true));
 		
@@ -35,7 +35,7 @@ public class EmailDedupe {
 		String currEmail;
 		
 		// read input by line and write out email only the first time they appear
-		while((currEmail = buffReader.readLine()) != null) {
+		while ((currEmail = buffReader.readLine()) != null) {
 			String[] splitEmail = currEmail.split("@", 2);
 			Set<String> names = storedEmails.get(splitEmail[1]);
 			

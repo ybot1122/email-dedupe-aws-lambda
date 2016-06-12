@@ -115,9 +115,9 @@ var getLastLog = function() {
                 reportLogs.innerHTML = "cloudwatchlogs failure: " + err;
             } else {
                 var metrics = parseLogMessage(data.events[0].message);
-                reportLogs.innerHTML = "CLOUDWATCH LOG METRICS: " +
-                    metrics.requestId + ", " +
-                    metrics.duration + ", " +
+                reportLogs.innerHTML = "CLOUDWATCH LOG METRICS: <br />" +
+                    metrics.requestId + "<br />" +
+                    metrics.duration + "<br />" +
                     metrics.memoryUsed;
             }
         });

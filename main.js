@@ -1,7 +1,7 @@
 /**
-    Helper function for basic input validation
+    Perform for basic input validation on textarea value
     Unfortunately, the backend service does NOT have this check
-        which is not best practice. Should be suitable for demo purposes.
+        which is not best practice. For demo purposes.
 **/
 var inputValidation = function() {
     var textarea = document.getElementById("email-list");
@@ -51,7 +51,11 @@ var inputValidation = function() {
 }
 
 /**
-    Define helper function to handle CloudWatchLogs retrieval    
+    Helper function to parse the CloudWatchLog event message into JSON
+**/
+
+/**
+    Procedure to retrieve Lambda's logStreams, and then the latest event logged
 **/
 var cloudwatchlogs = new AWS.CloudWatchLogs();
 var getLastLog = function() {
@@ -100,7 +104,7 @@ var getLastLog = function() {
 
 
 /**
-    Attach the s3 bucket upload functionality to DOM
+    Attach s3 bucket upload functionality to button click callback
 **/
 var bucket = new AWS.S3({
     params: {

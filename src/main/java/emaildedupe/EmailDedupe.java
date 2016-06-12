@@ -22,7 +22,7 @@ public class EmailDedupe {
         AmazonS3 s3Client = new AmazonS3Client();
         
     	// reading input
-    	S3Object emailList = s3Client.getObject("elasticbeanstalk-us-west-2-365496274414", "emails.txt");
+    	S3Object emailList = s3Client.getObject("email-dedupe-bucket", "emails.txt");
     	InputStream stream = emailList.getObjectContent();
     	BufferedReader buffReader = new BufferedReader(new InputStreamReader(stream));
     	
@@ -53,7 +53,7 @@ public class EmailDedupe {
 
 		writer.flush();
 		
-		s3Client.putObject("elasticbeanstalk-us-west-2-365496274414", "output.txt", output);
+		s3Client.putObject("email-dedupe-bucket", "output.txt", output);
 
 		writer.close();
 		buffReader.close();

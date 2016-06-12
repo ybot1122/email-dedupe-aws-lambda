@@ -78,7 +78,7 @@ var getLastLog = function() {
         console.log(data);
 
         var logParams = {
-            logGroupName: "/aws/lambda/test",
+            logGroupName: "/aws/lambda/email-deduping",
             logStreamName: streamName,
             limit: 1,
             startFromHead: false
